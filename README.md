@@ -1,2 +1,4 @@
 # pseudo-reddit
-Pseudo reddit SQL DB
+## Pseudo reddit SQL DB implementation
+
+
