@@ -1,5 +1,5 @@
 # pseudo-reddit
-## Pseudo reddit SQL DB implementation
+## Pseudo Reddit Postgres DB implementation
 
 # Go installation
 
