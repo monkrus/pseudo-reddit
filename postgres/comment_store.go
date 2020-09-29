@@ -8,53 +8,54 @@ import (
 	goreddit "github.com/monkrus/pseudo-reddit.git"
 )
 
-func NewThreadStore(db *sqlx.DB) *ThreadStore {
-	return &ThreadStore{
+func NewCommentStore(db *sqlx.DB) *CommentStore {
+	return &CommentStore{
 		DB: db,
 	}
 }
 
-type ThreadStore struct {
+type CommentStore struct {
 	*sqlx.DB
 }
 
-// queries a thread based based on its ID
-func (s *ThreadStore) Thread(id uuid.UUID) (goreddit.Thread, error) {
-	var t goreddit.Thread
-	if err := s.Get(&t, `SELECT * FROM threads WHERE id =$1`, id); err != nil {
-		return goreddit.Thread{}, fmt.Errorf("error getting thread: %w", err)
+func (s *CommentStore) Comment(id uuid.UUID) (goreddit.Comment, error) {
+	var t goreddit.Comment
+	if err := s.Get(&c, `SELECT * FROM threads WHERE id =$1`, id); err != nil {
+		return goreddit.Comment{}, fmt.Errorf("error getting comment: %w", err)
 	}
-	return t, nil
+	return c, nil
 }
-func (s *ThreadStore) Threads() ([]goreddit.Thread, error) {
-	var tt []goreddit.Thread
-	if err := s.Select(&tt, `SELECT * FROM threads`); err != nil {
-		return []goreddit.Thread{}, fmt.Errorf("error getting threads: %w", err)
+func (s *CommentStore) CommentsByPost(postID uuid.UUID) ([]goreddit.Comment, error) {
+	var cc []goreddit.Comment
+	if err := s.Select(&cc, `SELECT * FROM post_id =$1`, postID); err != nil {
+		return []goreddit.Comment{}, fmt.Errorf("error getting comments: %w", err)
 	}
-	return tt, nil
+	return cc, nil
 }
-func (s *ThreadStore) CreateThread(t *goreddit.Thread) error {
-	if err := s.Get(t, `INSERT INTO threads VALUES($1, $2, $3) RETURNING *`,
-		t.ID,
-		t.Title,
-		t.Description); err != nil {
-		return fmt.Errorf("error creating thread: %w", err)
+func (s *CommentStore) CreateComment(c *goreddit.Thread) error {
+	if err := s.Get(c, `INSERT INTO threads VALUES($1, $2, $3) RETURNING *`,
+		c.ID,
+		c.PostID,
+		c.Content,
+		c.Votes); err != nil {
+		return fmt.Errorf("error creating comment: %w", err)
 	}
 	return nil
 }
 
-func (s *ThreadStore) UpdateThread(t *goreddit.Thread) error {
-	if err := s.Get(t, `UPDATE threads VALUES($1, $2, $3) RETURNING *`,
-		t.ID,
-		t.Title,
-		t.Description); err != nil {
-		return fmt.Errorf("error creating thread: %w", err)
+func (s *CommentStore) UpdateComment(t *goreddit.Comment) error {
+	if err := s.Get(t, `UPDATE comments SET post_id = $1, content = $2, votes = $3 WHERE id = $4 RETURNING *`,
+		c.PostID,
+		c.Content,
+		c.Votes,
+		c.ID); err != nil {
+		return fmt.Errorf("error updating comment: %w", err)
 	}
 	return nil
 }
-func (s *ThreadStore) DeleteThread(t *goreddit.Thread) error {
-	if _, err := s.Exec(`DELETE FROM threads WHERE id = $1, id`); err != nil {
-		return fmt.Errorf("error deleting thread: %w, err")
+func (s *CommentStore) DeleteComment(id uuid.UUID) error {
+	if _, err := s.Exec(`DELETE FROM comments WHERE id = $1, id`); err != nil {
+		return fmt.Errorf("error deleting comment: %w, err")
 	}
 	return nil
 }

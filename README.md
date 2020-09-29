@@ -21,4 +21,8 @@
 
 4. After creating makefile, run DB `make postgres`, `make adminer`, and migrations `run migrate`.
 
-5. sqlx package is used for DB queries.  
+5. sqlx package is used for DB queries `go get github.com/jmoiron/sqlx`
+
+6. Download driver for en/decoding messages b/w Go and DB :`go get github.com/lib/pq`
+
+
