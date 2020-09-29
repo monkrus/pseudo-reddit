@@ -4,28 +4,27 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
-	goreddit "github.com/monkrus/pseudo-reddit.git"
 )
 
 func NewStore(dataSourceName string) (*Store, error) {
-	db, error := sqlx.Open("postgres", dataSourceName)
+	db, err := sqlx.Open("postgres", dataSourceName)
 	if err != nil {
 		return nil, fmt.Errorf("error opening database")
 	}
 	if err := db.Ping(); err != nil {
-		return nil, fmt.Errorf("error connecting to database: %w", error)
+		return nil, fmt.Errorf("error connecting to database: %w", err)
 	}
 
 	return &Store{
-		ThreadStore:  NewThreadStore(db),
-		PostStore:    NewPostStore(db),
-		CommentStore: NewCommentStore(db),
+		ThreadStore:  &ThreadStore{DB: db},
+		PostStore:    &PostStore{DB: db},
+		CommentStore: &CommentStore{DB: db},
 	}, nil
 
 }
 
 type Store struct {
-	goreddit.ThreadStore
-	goreddit.PostStore
-	goreddit.CommentStore
+	*ThreadStore
+	*PostStore
+	*CommentStore
 }

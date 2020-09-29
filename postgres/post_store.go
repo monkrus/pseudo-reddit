@@ -8,11 +8,10 @@ import (
 	goreddit "github.com/monkrus/pseudo-reddit.git"
 )
 
-func NewPostStore(db *sqlx.DB) *PostStore {
-	return &PostStore{
-		DB: db,
-	}
+type PostStore struct {
+	*sqlx.DB
 }
+
 func (s *PostStore) Post(id uuid.UUID) (goreddit.Post, error) {
 	var p goreddit.Post
 	if err := s.Get(&p, `SELECT * FROM posts WHERE id =$1`, id); err != nil {
@@ -28,7 +27,7 @@ func (s *PostStore) PostsByThreads(threadID uuid.UUID) ([]goreddit.Post, error) 
 	return pp, nil
 }
 func (s *PostStore) CreatePost(p *goreddit.Post) error {
-	if err := s.Get(t, `INSERT INTO posts VALUES($1, $2, $3) RETURNING *`,
+	if err := s.Get(p, `INSERT INTO posts VALUES($1, $2, $3) RETURNING *`,
 		p.ID,
 		p.ThreadID,
 		p.Title,
@@ -41,9 +40,11 @@ func (s *PostStore) CreatePost(p *goreddit.Post) error {
 
 func (s *PostStore) UpdatePost(p *goreddit.Post) error {
 	if err := s.Get(p, `UPDATE posts SET thread_id = $1, title = $2, content =$3 , votes= $4 WHERE id = $5 RETURNING *`,
-		t.ID,
-		t.Title,
-		t.Description); err != nil {
+		p.ThreadID,
+		p.Title,
+		p.Content,
+		p.Votes,
+		p.ID); err != nil {
 		return fmt.Errorf("error updating post: %w", err)
 	}
 	return nil
