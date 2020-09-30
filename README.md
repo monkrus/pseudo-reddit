@@ -25,4 +25,7 @@
 
 6. Download driver for en/decoding messages b/w Go and DB :`go get github.com/lib/pq`
 
+7. Install chi router :`go get -u github.com/go-chi/chi`
+
+8. Run server `go run cmd/goreddit/main.go`
 
