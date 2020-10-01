@@ -18,9 +18,10 @@ func NewHandler(store goreddit.Store) *Handler {
 
 	h.Use(middleware.Logger)
 	h.Route("/threads", func(r chi.Router) {
-    r.Get("/", h.ThreadsList())
+		r.Get("/", h.ThreadsList())
 	})
-
+	return h
+}
 
 type Handler struct {
 	*chi.Mux

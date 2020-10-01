@@ -44,7 +44,7 @@ type CommentStore interface {
 	CommentsByPost(postID uuid.UUID) ([]Thread, error)
 	CreateComment(t *Thread) error
 	UpdateComment(t *Thread) error
-	DeleteCooment(id uuid.UUID) error
+	DeleteComment(id uuid.UUID) error
 }
 
 type Store interface {
