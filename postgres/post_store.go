@@ -66,3 +66,22 @@ func (s *PostStore) CreatePost(p *goreddit.Post) error {
 	}
 	return nil
 }
+
+func (s *PostStore) UpdatePost(p *goreddit.Post) error {
+	if err := s.Get(p, `UPDATE posts SET thread_id = $1, title = $2, content = $3, votes = $4 WHERE id = $5 RETURNING *`,
+		p.ThreadID,
+		p.Title,
+		p.Content,
+		p.Votes,
+		p.ID); err != nil {
+		return fmt.Errorf("error updating post: %w", err)
+	}
+	return nil
+}
+
+func (s *PostStore) DeletePost(id uuid.UUID) error {
+	if _, err := s.Exec(`DELETE FROM posts WHERE id = $1`, id); err != nil {
+		return fmt.Errorf("error deleting post: %w", err)
+	}
+	return nil
+}

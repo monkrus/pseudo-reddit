@@ -40,10 +40,10 @@ type PostStore interface {
 }
 
 type CommentStore interface {
-	Comment(id uuid.UUID) (Thread, error)
-	CommentsByPost(postID uuid.UUID) ([]Thread, error)
-	CreateComment(t *Thread) error
-	UpdateComment(t *Thread) error
+	Comment(id uuid.UUID) (Comment, error)
+	CommentsByPost(postID uuid.UUID) ([]Comment, error)
+	CreateComment(t *Comment) error
+	UpdateComment(t *Comment) error
 	DeleteComment(id uuid.UUID) error
 }
 
