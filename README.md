@@ -1,5 +1,26 @@
-# pseudo-reddit
-## Pseudo Reddit Postgres DB implementation
+<h1 align="center">Welcome to Creating a Reddit Clone in Go tutorial Walkthrough 👋</h1>
+
+<p>
+
+  <img alt="Part" src="https://img.shields.io/badge/version-01-blue.svg?cacheSeconds=2592000" />
+
+</p>
+
+### 🏠 [Homepage](https://course.gowebexamples.com/course/creating-a-reddit-clone-in-go)
+
+## Author
+👤 ** gowebexamples **
+
+## Reviewer
+👤 ** monkrus **
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+
+
 
 # Go installation
 
